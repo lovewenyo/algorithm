@@ -23,14 +23,14 @@ import java.util.Scanner;
 	28
  */
 /**
- * @description : 最短路径
+ * @description : 最短路径(包含回来)
  * @author      : dingjie
- * @date 	    : 2018年7月24日 下午2:49:52 
+ * @date 	    : 2018年7月20日 下午2:49:52 
  */
 public class Demo1 {
 
-	final Point START = new Point(0,0);
-    int minpath = Integer.MAX_VALUE;
+	final Point START = new Point(0,0); /** 定义起点 */
+    int minpath = Integer.MAX_VALUE;    
 
     public int calculate(Point start, Point[] points, int sum, int count){
         if(count == points.length){
@@ -56,14 +56,17 @@ public class Demo1 {
     }
     
     private void run() {
+    	
         Scanner input = new Scanner(System.in);
-        int pnum = Integer.parseInt(input.nextLine().trim());
-        /**构建点集*/
-        Point[] points = new Point[pnum];
+        int pnum = Integer.parseInt(input.nextLine().trim()); 	/** 点的个数 */
+
+        Point[] points = new Point[pnum]; 						/** 构建点集 */
         for(int i = 0; i<pnum; i++){
             String[] locations = input.nextLine().trim().split(",");
             points[i] = new Point(Integer.parseInt(locations[0]), Integer.parseInt(locations[1]));
         }
+        
+        input.close();
         
         int min = calculate(START, points, 0, 0);
         System.out.println(min);	
@@ -71,34 +74,28 @@ public class Demo1 {
 
 	class Point{
 		
-        int px;/** x轴坐标 */
+        int x;				/** x轴坐标  */
         
-        int py;/** y轴坐标 */
+        int y;				/** y轴坐标  */
 
-        boolean visited;/** 访问标记 */
+        boolean visited;	/** 访问标记 */
         
-        public Point(){
+        public Point(){ 
         	
         }
 
-        public Point(int px, int py) {
-            this.px = px;
-            this.py = py;
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
             this.visited = false;
-        }
-        
-        public Point(int px, int py,boolean visited) {
-            this.px = px;
-            this.py = py;
-            this.visited = visited;
         }
 
         /** 计算两点之间的距离
-         * @param p
-         * @return
+         * @param p 点
+         * @return 两点之间的距离
          */
         public int getLength(Point p){
-            return Math.abs(px - p.px) + Math.abs(py - p.py);
+            return Math.abs(x - p.x) + Math.abs(y - p.y);
         }
     }
 }
