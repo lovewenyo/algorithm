@@ -79,7 +79,7 @@ public class Demo4 {
 			}
 		}
 		if(blank(board) == 5) {
-			//走了四部 没人走两步
+			//走了四部 每人走两步
 			if(hasDead(board,2)) {
 				//可能Bob送死，只需要一步Alice赢(最后剩下4个空格)
 				System.out.println(1+4);
