@@ -62,8 +62,8 @@ public class Demo4 {
 	private static int getShortestPath(ArrayList<Route> routeList,int n) {
 		int start=1, destination=n;                   //定义起点终点	
 		int sum = 0,flag = start;
-		int[] path = new int[destination+1];
-		int[] tired = new int[destination+1];
+		int[] path = new int[destination+1];          //记录前驱
+		int[] tired = new int[destination+1];         //记录起点到该点的最小疲劳值
 		
 		while(flag <= destination){
 			for (int i = 0; i < routeList.size(); i++) {
@@ -73,7 +73,7 @@ public class Demo4 {
 						temp = tired[routeList.get(i).getStart()]+routeList.get(i).getLenth();
 					else 
 						temp = getTired(routeList,path,tired,routeList.get(i));
-					
+			
 					if(tired[routeList.get(i).getDestination()] == 0 ||
 							tired[routeList.get(i).getDestination()] > temp) {
 						tired[routeList.get(i).getDestination()] = temp;
@@ -90,6 +90,10 @@ public class Demo4 {
 		return sum;
 	}
 
+	/**
+	 * @description 计算起点到route.getDestination()的疲劳值(判断route之前的是否也是走小路，可能有叠加的情况)
+	 * @return 疲劳值
+	 */
 	public static int getTired(ArrayList<Route> routeList, int[] path, int[] tired, Route route) {
 		boolean isBigRoute = false;
 		int flag = route.getStart();
@@ -133,7 +137,7 @@ public class Demo4 {
 		return sum;
 	}
 }
-class Route implements Comparable{
+class Route{
 	private int type;
 	
 	private int start;
@@ -183,29 +187,4 @@ class Route implements Comparable{
 	public void setLenth(int lenth) {
 		this.lenth = lenth;
 	}
-
-	@Override
-	public int compareTo(Object o) {
-		if(this.getDestination() == ((Route)o).getDestination()) {
-			int tired1 = this.getType() == 0?
-					this.getLenth() : this.getLenth()*this.getLenth();
-			int tired2 = ((Route)o).getType() == 0?
-					((Route)o).getLenth() : ((Route)o).getLenth()*((Route)o).getLenth();
-			if(tired1 > tired2) {		
-				return 1;
-			}
-			if(tired1 < tired2) {		
-				return -1;
-			}
-			return 0;
-		}
-		return 0;
-	}
-
-	@Override
-	public String toString() {
-		return "Route [type=" + type + ", start=" + start + ", destination=" + destination + ", lenth=" + lenth + "]";
-	}
-
-	
 }
