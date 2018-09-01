@@ -1,4 +1,4 @@
-package pers.dingjie.sort;
+package pers.dingjie.common;
 
 /**
  * @description :

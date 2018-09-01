@@ -1,4 +1,4 @@
-package pers.dingjie.sort;
+package pers.dingjie.common;
 
 /**
  *    优点:
@@ -15,7 +15,7 @@ package pers.dingjie.sort;
 /**
  * @description : 桶排序
  * @author      : dingjie
- * @date 	    : 2017年7月24日 上午10:14:11 
+ * @date 	    : 2016年7月24日 上午10:14:11 
  */
 public class BucketSort {
     public static void main(String[] args) {

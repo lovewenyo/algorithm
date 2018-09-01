@@ -1,7 +1,7 @@
-package pers.dingjie.sort;
+package pers.dingjie.common;
 
 /**
- * @description :
+ * @description : 插入排序
  * @author      : dingjie
  * @date 	    : 2017年7月24日 上午10:22:32 
  */

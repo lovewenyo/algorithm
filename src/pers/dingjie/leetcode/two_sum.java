@@ -10,7 +10,7 @@ import java.util.Map;
  * @author      : dingjie
  * @date 	    : 2018年9月1日 下午10:30:54 
  */
-public class Demo1 {
+public class two_sum {
 
 	/**
 	 * @description 暴力法

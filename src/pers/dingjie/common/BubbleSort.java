@@ -1,9 +1,9 @@
-package pers.dingjie.sort;
+package pers.dingjie.common;
 
 /**
  * @description : 冒泡排序
  * @author      : dingjie
- * @date 	    : 201年7月24日 上午10:21:37
+ * @date 	    : 2016年7月24日 上午10:21:37
  */
 public class BubbleSort {
     public static void main(String[] args) {
@@ -78,16 +78,15 @@ public class BubbleSort {
 
     }
 
+    /**
+     * @description 改进后的冒泡排序
+     * 		传统冒泡排序中每一趟排序操作只能找到一个最大值或最小值
+     * 		我们考虑利用在每趟排序中进行正向和反向两遍冒泡的方法一次可以得到两个最终值(最大者和最小者) 
+     * 		从而使排序趟数几乎减少了一半。
+     * @param x 待排数组
+     * @param n 数组大小
+     */
     public void bubbleSort_2(int []x, int n){
-         /**
-           * @Description:  改进后的冒泡排序
-          *      传统冒泡排序中每一趟排序操作只能找到一个最大值或最小值,
-          *      我们考虑利用在每趟排序中进行正向和反向两遍冒泡的方法一次可以得到两个最终值(最大者和最小者) ,
-          *      从而使排序趟数几乎减少了一半。
-           * @param x  //待排数组
-         * @param n   //数组大小
-           * @return void
-           */
         int low = 0;
         int high= n -1; //设置变量的初始值
         int temp,j;
