@@ -1,8 +1,8 @@
 package pers.dingjie.ccf.time_2018_03;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
 /**
 问题描述
 　　URL 映射是诸如 Django、Ruby on Rails 等网页框架 (web frameworks) 的一个重要组件。对于从浏览器发来的 HTTP 请求，URL 映射模块会解析请求中的 URL 地址，并将其分派给相应的处理代码。现在，请你来实现一个简单的 URL 映射功能。
@@ -52,169 +52,142 @@ static_serve js/jquery.js
  * @date 	    : 2018年8月28日 下午5:31:28 
  */
 public class Demo3 {
+    private static List<String> ans = new ArrayList<String>();
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            String[] rules = new String[n];	//存储规则
+            String[] rname = new String[n]; //存储规则名称
+            String[] strURL = new String[m];//待处理的 URL 地址
+            scanner.nextLine();				//吸收空格
+            
+            for (int i = 0; i < n; i++) {
+                String[] split = scanner.nextLine().split(" ");
+                rules[i] = split[0];
+                rname[i] = split[1];
+            }
+            for (int i = 0; i < m; i++) {
+            	strURL[i] = scanner.nextLine();
+            }
+            
+            for (int i = 0; i < m; i++) {
+                boolean flag = false;  //flag true表示找到
+            
+                for (int j = 0; j < n; j++) {
+                    flag = check(strURL[i], rules[j]);
+                    if (flag) { //找到
+                        System.out.print(rname[j]);
+                        for (int k = 0; k < ans.size(); k++) {
+                            if (check(ans.get(k)) == "<int>") {
+                                System.out.print(" " + toi(ans.get(k)));
+                            } else {
+                                System.out.print(" " + ans.get(k));
+                            }
+                        }
+                        System.out.println();
+                        break;
+                    }
+                }
+                if (!flag) {
+                    System.out.println(404);
+                }
+            }
+        } //while循环
+        
+        scanner.close();
+    }
 
-	public static void main(String[] args) {
-		int m,n;
-		Scanner scanner = new Scanner(System.in);
-		n = scanner.nextInt();
-		m = scanner.nextInt();
-		scanner.nextLine();
-		Rule[] rules = new Rule[n];
-		String[] requstStrArr = new String[m];
-		
-		for (int i = 0; i < n; i++) {
-			String input = scanner.nextLine();
-			String[] strArr = input.substring(1, input.length()).split(" ");
-			rules[i]=new Rule(strArr[0],strArr[1]);
-		}
-		
-		for (int i = 0; i < m; i++) {
-			String input = scanner.nextLine();
-			requstStrArr[i] = input.substring(1, input.length());
-		}
-		scanner.close();
-		
-		for (int i = 0; i < requstStrArr.length; i++) {
-			ismatch(requstStrArr[i],rules);
-		}
-		
-	}
-	
-	public static void ismatch(String requestStr,Rule[] rules) {
-		String[] param1 = requestStr.split("/");  //解析请求
-		boolean success = false;         //是否成功标志
-		
-		for (int j = 0; j < rules.length; j++) {
-			if(success) {
-				//以及和一个规则匹配，则无需继续匹配
-				break;
-			}
-			
-			ArrayList<String> paramStack = new ArrayList<String>(); //存储已匹配的字符串
-			String[] param2 = rules[j].getMapping().split("/");   //解析请求
-			
-			int k = 0;			
-			while(k<param1.length && k<param2.length) {
-				if(param2[k].equals("<path>")) {
-					//输出匹配信息 此情况比较特殊
-					StringBuffer mapped = new StringBuffer();
-					for (int l = k; l < param1.length; l++) {
-						if(k == 0) {
-							mapped.append("/");
-						}
-						if(l == param1.length-1) {
-							mapped.append(param1[l]);
-						}else {
-							mapped.append(param1[l] + "/");
-						}
-					}
-					System.out.println(rules[j].getResult()+" "+mapped.toString());
-					success = true;
-					break;
-				}else if(param2[k].equals("<int>")) {
-					try {
-						paramStack.add(Integer.parseInt(param1[k])+"");
-						if(k < param1.length-1) {
-							//继续匹配
-							k++;
-							continue;
-						}else {
-							//输出匹配信息
-							outputMessage(param1,rules[j],paramStack,k);
-							success = true;
-							break;
-						}	
-					}catch(Exception e) {
-						if(j == rules.length-1) {
-							System.out.println("404");
-						}
-						//不匹配
-						break;
-					}
-				}else if(param2[k].equals("<str>")) {
-					paramStack.add(param1[k]);
-					if(k < param1.length-1) {
-						//继续匹配
-						k++;
-						continue;
-					}else {
-						//输出匹配信息
-						outputMessage(param1,rules[j],paramStack,k);
-						success = true;
-						break;
-					}
-				}else if(param2[k].equals(param1[k])) {
-					if(k < param1.length-1) {
-						//继续匹配
-						k++;
-						continue;
-					}else {
-						//输出匹配信息
-						outputMessage(param1,rules[j],paramStack,k);
-						success = true;
-						break;
-					}
-				}else {
-					//不匹配
-					if(j == rules.length-1) {
-						System.out.println("404");
-					}
-					break;
-				}
-			}
-		}
-	}
-	
-	public static void outputMessage(String[] param1,Rule rule,ArrayList<String> paramStack,int k) {
-		StringBuffer mapped = new StringBuffer();
-		
-		for (int i = 0; i < paramStack.size(); i++) {
-			mapped.append(paramStack.get(i)+" ");
-		}
-		
-		for (int l = k+1; l < param1.length; l++) {
-			if(k == 0) {
-				mapped.append("/");
-			}
-			if(l == param1.length-1) {
-				mapped.append(param1[l]);
-			}else {
-				mapped.append(param1[l] + "/");
-			}
-		}
-		System.out.println(rule.getResult()+" "+mapped.toString());
-	}
-}
+    private static int toi(String str) {
+        int ans = 0;
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            ans = ans*10 + str.charAt(i) - '0';
+        }
+        return ans;
+    }
 
+    private static boolean check(String strp, String strq) {
+        List<String> cnt1 = new ArrayList<>();
+        List<String> cnt2 = new ArrayList<>();
+        solve(cnt1, strq);
+        solve(cnt2, strp);
+        
+        int tot = 1;
+        if (cnt1.size() > cnt2.size()) {
+            return false;
+        }
+        if (cnt1.size() >= 1) {
+            if (cnt1.size() < cnt2.size() && !cnt1.get(cnt1.size()-1).equals("<path>")) {
+                return false;
+            }
+        }
+        
+        if (cnt1.size() == 0 && cnt2.size() != 0) {
+            return false;
+        }
+        
+        ans.clear();
+        for (int i = 0; i < cnt1.size(); i++) {
+            if (cnt1.get(i).equals(cnt2.get(i))) {
+                tot += (cnt2.get(i).length() + 1);
+                continue;
+            } else if (cnt1.get(i).equals("<path>")) {
+                ans.add(strp.substring(tot, strp.length()));
+                return true;
+            } else if (cnt1.get(i).equals(check(cnt2.get(i)))) {
+                ans.add(cnt2.get(i));
+                tot += (cnt2.get(i).length()+1);
+            } else {
+                return false;
+            }
+        }
+        
+        
+        if (strp.charAt(strp.length()-1) == '/' && strq.charAt(strq.length()-1) != '/') {
+            return false;
+        }
+        if (strp.charAt(strp.length()-1) != '/' && strq.charAt(strq.length()-1) == '/') {
+            return false;
+        }
+        
+        
+        return true;
+    }
+    
+    private static void solve(List<String> V, String str) {
+        int len = str.length();
+        String cnt = "";
+        for (int i = 1; i < len; i++) {
+            if (str.charAt(i) == '/') {
+                V.add(cnt);
+                cnt = "";
+            } else {
+                cnt += str.charAt(i);
+            }
+        }
+        if (cnt != "") {
+            V.add(cnt);
+        }
+    }
 
-
-class Rule{
-	
-	private String mapping = "";
-	
-	private String result ="";
-	
-	public Rule() {
-		
-	}
-	public Rule(String mapping,String result) {
-		this.mapping = mapping;
-		this.result = result;
-	}
-
-	public String getMapping() {
-		return mapping;
-	}
-
-	public void setMapping(String mapping) {
-		this.mapping = mapping;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
-	}
+    private static String check(String str) {
+        int len = str.length();
+        int flag = 0;
+        for (int i = 0; i < len; i++) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                flag = 1;
+                break;
+            }
+        }
+        
+        if (flag == 0) {
+            return "<int>";
+        } else {
+            return "<str>";
+        }
+    }
 }
