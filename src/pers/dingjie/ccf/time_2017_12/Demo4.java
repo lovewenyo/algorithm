@@ -1,7 +1,6 @@
 package pers.dingjie.ccf.time_2017_12;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -41,150 +40,75 @@ import java.util.Scanner;
  * @date 	    : 2018年9月1日 下午4:08:02 
  */
 public class Demo4 {
-	public static void main(String[] args) {
-		int n,m;
+	public static void main(String args[]) {
 		Scanner scanner = new Scanner(System.in);
-		n = scanner.nextInt();
-		m = scanner.nextInt();
-		ArrayList<Route> routeList = new ArrayList<Route>();
-		
-		for (int i = 0; i < m; i++) {
-			Route route = new Route(scanner.nextInt(),
-					scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
-			routeList.add(route);
+		int n = scanner.nextInt(),m = scanner.nextInt();
+		long[][] edges=new long[n+1][n+1];
+
+	    int[][] tag=new int[n+1][n+1];
+	    for(int i=0;i<n+1;i++){
+	        Arrays.fill(edges[i], 10*10*10*10*10*10);
+	    }
+	    for(int j=0;j<=n;j++)
+	    	edges[j][j]=0;//这里其实做不做都可以 写32767也行
+	    for(int i=0;i<m;i++){
+			int a1=scanner.nextInt();//System.out.println(a1);//指示为大路（0）还是小路（1）
+			int a2=scanner.nextInt();//System.out.println(a2);//from
+			int a3=scanner.nextInt();//System.out.println(a3);//to
+			long a4=scanner.nextInt();//System.out.println(a4);//weight
+			tag[a2][a3]=a1; tag[a3][a2]=a1;
+			edges[a2][a3]=a4;edges[a3][a2]=a4;
 		}
-		scanner.close();
-		
-		System.out.println(getShortestPath(routeList,n));
-		
-	}
-
-	private static int getShortestPath(ArrayList<Route> routeList,int n) {
-		int start=1, destination=n;                   //定义起点终点	
-		int sum = 0,flag = start;
-		int[] path = new int[destination+1];          //记录前驱
-		int[] tired = new int[destination+1];         //记录起点到该点的最小疲劳值
-		
-		while(flag <= destination){
-			for (int i = 0; i < routeList.size(); i++) {
-				if(routeList.get(i).getStart() == flag) {
-					int temp;
-					if(routeList.get(i).getType() == 0) 
-						temp = tired[routeList.get(i).getStart()]+routeList.get(i).getLenth();
-					else 
-						temp = getTired(routeList,path,tired,routeList.get(i));
-			
-					if(tired[routeList.get(i).getDestination()] == 0 ||
-							tired[routeList.get(i).getDestination()] > temp) {
-						tired[routeList.get(i).getDestination()] = temp;
-						path[routeList.get(i).getDestination()] = routeList.get(i).getStart();
-					}
-					
-				}
-			}
-			flag ++;
-		}
-		
-		sum = tired[destination];
-		
-		return sum;
-	}
-
-	/**
-	 * @description 计算起点到route.getDestination()的疲劳值(判断route之前的是否也是走小路，可能有叠加的情况)
-	 * @return 疲劳值
-	 */
-	public static int getTired(ArrayList<Route> routeList, int[] path, int[] tired, Route route) {
-		boolean isBigRoute = false;
-		int flag = route.getStart();
-		int sum= 0;
-		int smallLength = route.getLenth();
-		while(!isBigRoute && flag > 1) {
-			int parent = path[flag];
-			for (int i = 0; i < routeList.size(); i++) {
-				if(routeList.get(i).getStart() == parent && routeList.get(i).getDestination() == flag) {
-					if(parent == 1) {
-						if(routeList.get(i).getType() == 0) {
-							sum = tired[flag] + smallLength * smallLength;
-						}else {
-							smallLength = smallLength + routeList.get(i).getLenth();
-							sum = tired[parent] + smallLength * smallLength;
-						}
-						flag = 0;
-						break;
-					}
-					if(routeList.get(i).getType() == 0) {
-						sum = tired[flag] + smallLength * smallLength;
-						isBigRoute = true;
-					}else {
-						smallLength = smallLength + routeList.get(i).getLenth();
-						flag = parent;
-					}
-				}
-			}
-		}
-		
-		if(flag == 1) {
-			for (int i = 0; i < routeList.size(); i++) {
-				if(routeList.get(i).getType() == 1) {
-					sum = tired[flag] + smallLength * smallLength;
-					tired[route.getDestination()] = sum;
-					path[route.getDestination()] = 1;
-				}
-			}
-		}
-		
-		return sum;
-	}
-}
-class Route{
-	private int type;
-	
-	private int start;
-	
-	private int destination;
-	
-	private int lenth;
-	
-	public Route() {}
-
-	public Route(int type, int start, int destination, int lenth) {
-		super();
-		this.type = type;
-		this.start = start;
-		this.destination = destination;
-		this.lenth = lenth;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getDestination() {
-		return destination;
-	}
-
-	public void setDestination(int destination) {
-		this.destination = destination;
-	}
-
-	public int getLenth() {
-		return lenth;
-	}
-
-	public void setLenth(int lenth) {
-		this.lenth = lenth;
+	    scanner.close();
+	    
+		long[] dist=new long[n+1];//到待定点的距离
+		long[] lianxi=new long[n+1];//已连续走了多少路
+		int[] visited=new int[n+1];//该点是否已被访问
+		Arrays.fill(dist,10*10*10*10*10*10);
+		dist[1]=0;
+        Arrays.fill(visited, 0);
+        Arrays.fill(lianxi, 0);
+        //如果距离初始化的话就可以按照课本来
+        //否则按照下面步骤
+        for(int j=0;j<n;j++){
+        	int v=-1;
+            for(int k=1;k<=n;k++){
+            	if(visited[k]==0){
+            		if(v==-1||(dist[k]<dist[v]))
+            			v=k;
+            	}
+       
+            }
+            if(v==-1)//有没有都可以 前面for循环已经限定了次数
+            	break;
+            visited[v]=1;//将点拿入
+      
+            for(int mm=1;mm<=n;mm++){//大道
+            	if(visited[mm]==0) {//这句话其实用不用都行  因为不这样也就是多搜索几遍而已
+	            		if(tag[v][mm]==0){
+	            			if(dist[mm]>dist[v]+edges[v][mm]){
+	            				dist[mm]=dist[v]+edges[v][mm];
+	            				lianxi[mm]=0;
+	            			}
+	            		}//小道
+	            		else if(tag[v][mm]==1){
+	            			if(lianxi[v]==0){
+	            				long temp=dist[v]+edges[v][mm]*edges[v][mm];
+	            				if(temp<dist[mm]){
+							         dist[mm]=temp;
+							         lianxi[mm]=edges[v][mm];
+	            				}
+	            			}else{
+	            				long temp=dist[v]-lianxi[v]*lianxi[v]+(lianxi[v]+edges[v][mm])*(lianxi[v]+edges[v][mm]);
+	            				if(temp<dist[mm]){
+	            					dist[mm]=temp;
+	            					lianxi[mm]=edges[v][mm]+lianxi[v];
+	            				}
+	            			}
+	            		}
+            	}
+            }
+        }   
+        System.out.println(dist[n]);
 	}
 }
