@@ -1,4 +1,4 @@
-package pers.dingjie.ali;
+package pers.dingjie.interview;
 
 import java.util.Scanner;
 /**
@@ -27,7 +27,7 @@ import java.util.Scanner;
  * @author      : dingjie
  * @date 	    : 2018年7月20日 下午2:49:52 
  */
-public class Demo1 {
+public class Ali_20180720 {
 
 	final Point START = new Point(0,0); /** 定义起点 */
     int minpath = Integer.MAX_VALUE;    
@@ -52,7 +52,7 @@ public class Demo1 {
     }
 
     public static void main(String[] args){
-    	new Demo1().run();
+    	new Ali_20180720().run();
     }
     
     private void run() {
