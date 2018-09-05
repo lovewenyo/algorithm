@@ -1,4 +1,4 @@
-package pers.dingjie.common;
+package pers.dingjie.classic;
 
 /**
  *    优点:
