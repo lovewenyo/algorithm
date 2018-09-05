@@ -1,7 +1,6 @@
 package pers.dingjie.ccf.time_2017_12;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -31,377 +30,249 @@ import java.util.Scanner;
  */
 
 /**
- * @description : Crontab
+ * @description : Crontab 40分
  * @author      : dingjie
  * @date 	    : 2018年7月24日 上午9:59:21 
  */
 public class Demo3 {
+    static int[] months = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-	public static void main(String[] args) {
-		new Demo3().run();
-	}
-	
-	@SuppressWarnings("all")
-	public void run() {
-		Scanner scanner = new Scanner(System.in);
-		int n;
-		long s,t,j;
-		n = scanner.nextInt();
-		j = s = scanner.nextLong();       //开始时间
-		t = scanner.nextLong();		      //结束时间
-		scanner.nextLine();
-		ArrayList<Crontab> list = new ArrayList<Crontab>();
-		
-		for(int i = 0 ;i < n;i++) {
-			String[] input = scanner.nextLine().split(" ");
-			list.add(new Crontab(input[0],input[1],input[2],
-					input[3],input[4],input[5]));
-		}
-		scanner.close();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);      
+        int crontabNum = scanner.nextInt();
+        String startDate = scanner.next();
+        String endDate = scanner.next();
+        String curDate = startDate;
 
-		for(long i = 0;i<t-s && j<t;i++) {
-			j = format(j); 
-			String year = (j+"").substring(0, 4);
-			String month = (j+"").substring(4, 6);
-			String day = (j+"").substring(6,8);
-			String hours = (j+"").substring(8,10);
-			String minuts = (j+"").substring(10,12);
-				Date data = new Date(year+"/"+month+"/"+day);
-			int week = data.getDay();    
-			
-			for(Crontab crontab:list) {		
-				if(match(crontab,month,day,week,hours,minuts)) {
-					//如果现在的时间和crontab匹配 则输出命令
-					System.out.println(j+" "+crontab.getCommand());
-				}		
-			}
-			j = j+1;//现在的时间
-		}
-	
-	}
-	
-	public boolean match(Crontab crontab, String month, String day, int week, String hours, String minuts) {
-		if(!matchWeek(week,crontab.getDayOfweek())) {
-			//如果星期几不匹配   14
-			return false;
-		}	
-		
-		if(!matchMonth(Integer.parseInt(month),crontab.getMonth())) {
-			//如果月份不匹配 24
-			return false;
-		}
-		
-		if(!matchA(hours,crontab.getHours())) {
-			//如果小时不匹配 24
-			return false;
-		}
-		
-		if(!matchA(day,crontab.getDayOfmonth())) {
-			//如果天数不匹配 30
-			return false;
-		}
-		
-		if(!matchA(minuts,crontab.getMinutes())) {
-			//如果分钟不匹配 60
-			return false;
-		}
+        //Crontab的每条配置信息存在列表list中
+        ArrayList<CrontabData> list = new ArrayList<>();
+        for (int i = 0; i < crontabNum; i++) {
+            list.add(new CrontabData(scanner.next(), scanner.next(),
+            		scanner.next(), scanner.next(), scanner.next(), scanner.next()));
+        }
+        scanner.close();
+        
+        //从开始时间开始查看每个时间是否符合Crontab
+        while (!curDate.equals(endDate)) {
+            int year = new Integer(curDate.substring(0, 4));
+            int[] data = new int[5];
 
-		return true;
-	}
+            //mins
+            data[0] = new Integer(curDate.substring(10, 12));
+            //hours
+            data[1] = new Integer(curDate.substring(8, 10));
+            //dayOfMonth
+            data[2] = new Integer(curDate.substring(6, 8));
+            //month
+            data[3] = new Integer(curDate.substring(4, 6));
+            //dayOfWeek
+            data[4] = getDayOfWeek(curDate) + 1;
 
-	public boolean matchA(String str1, String str2) {
-		if(str2.equals("*")) {
-			return true;
-		}
-		if(str2.contains("-")) {
-			if(str2.contains(",")) {
-				String[] strs = str2.split(",");
-				for (int i = 0; i < strs.length; i++) {
-					if(strs[i].contains("-")) {
-						String[] strs2 = strs[i].split("-");
-						int strStr1 = Integer.parseInt(str1);
-						int strMin = Integer.parseInt(strs2[0]);
-						int strMax = Integer.parseInt(strs2[1]);
-						if(strStr1 <= strMax && strStr1 >= strMin) {
-							return true;
-						}
-					}
-					if(strs[i].equals(str1)) {
-						return true;
-					}
-				}
+            //把这个时间的数据在Crontab配置信息里找匹配的配置
+            for (int i = 0; i < list.size(); i++) {
+                //找到就输出时间和任务
+                if (matchCrontab(list.get(i), data))
+                    System.out.println(curDate + " " + list.get(i).assignment);
+            }
 
-			}else {
-				String[] strs = str2.split("-");
-				int strStr1 = Integer.parseInt(str1);
-				int strMin = Integer.parseInt(strs[0]);
-				int strMax = Integer.parseInt(strs[1]);
-				if(strStr1 <= strMax && strStr1 >= strMin) {
-					return true;
-				}
-			}
-		}
-		if(str2.contains(",")) {
-			String[] strs = str2.split(",");
-			for (int i = 0; i < strs.length; i++) {
-				if(strs[i].equals(str1)) {
-					return true;
-				}
-			}
-		}
-		if(str2.equals(str1)) {
-			return true;
-		}else {
-			try {
-				if(Integer.parseInt(str2) == Integer.parseInt(str1)) {
-					return true;
-				}	
-			}catch(Exception e){}
-		}
-		return false;
-	}
-	
-	private boolean matchWeek(int week, String dayOfweek) {
-		if(dayOfweek.equals("*")) {
-			return true;
-		}
-		if(dayOfweek.contains("-")) {
-			if(dayOfweek.contains(",")) {
-				String[] weeks = dayOfweek.split(",");
-				for (int i = 0; i < weeks.length; i++) {
-					if(weeks[i].contains("-")) {
-						String[] weeks2 = weeks[i].split("-");
-						int weekMin = getWeek(weeks2[0]);
-						int weekMax = getWeek(weeks2[1]);
-						if(week <= weekMax && week >= weekMin) {
-							return true;
-						}	
-					}else {
-						if(week == getWeek(weeks[i])) {
-							return true;
-						}
-					}
-				}				
-			}else {
-				String[] weeks = dayOfweek.split("-");
-				int weekMin = getWeek(weeks[0]);
-				int weekMax = getWeek(weeks[1]);
-				if(week <= weekMax && week >= weekMin) {
-					return true;
-				}	
-			}
-		}
-		if(dayOfweek.contains(",")) {
-			String[] weeks = dayOfweek.split(",");
-			for (int i = 0; i < weeks.length; i++) {
-				if(week == getWeek(weeks[i])) {
-					return true;
-				}
-			}
-		}
-		if(week == getWeek(dayOfweek)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean matchMonth(int month, String month2) {
-		if(month2.equals("*")) {
-			return true;
-		}
-		if(month2.contains("-")) {
-			if(month2.contains(",")) {
-				String[] months = month2.split(",");
-				for (int i = 0; i < months.length; i++) {
-					if(months[i].contains("-")) {
-						String[] mongths2 = months[i].split("-");
-						int monthMin = getMonth(mongths2[0]);
-						int monthMax = getMonth(mongths2[1]);
-						if(month <= monthMax && month >= monthMin) {
-							return true;
-						}	
-					}else {
-						if(month == getMonth(months[i])) {
-							return true;
-						}
-					}
-				}				
-			}else {
-				String[] months = month2.split("-");
-				int monthMin = getMonth(months[0]);
-				int monthMax = getMonth(months[1]);
-				if(month <= monthMax && month >= monthMin) {
-					return true;
-				}	
-			}
-		}
-		if(month2.contains(",")) {
-			String[] months = month2.split(",");
-			for (int i = 0; i < months.length; i++) {
-				if(month == getMonth(months[i])) {
-					return true;
-				}
-			}
-		}
-		if(month == getMonth(month2)) {
-			return true;
-		}
-		return false;
-	}
-	
-	public int getWeek(String week) {
-		try {
-			return Integer.parseInt(week);
-		}catch(Exception e) {
-			String[] weeks = {"Sun","Mon","Tues","Wed","Thur","Fri","Sat"};
-			for (int i = 0; i < weeks.length; i++) {
-				if(week.equalsIgnoreCase(weeks[i])) {
-					return i;
-				}
-			}
-		}
-		return -1;
-	}
-	
-	public int getMonth(String month) {
-		try {
-			return Integer.parseInt(month);
-		}catch(Exception e) {
-			String[] months = {"Jan","Feb","Mar","Apr","May",
-					"Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-			for (int i = 0; i < months.length; i++) {
-				if(month.equalsIgnoreCase(months[i])) {
-					return i+1;
-				}
-			}
-		}
-		return -1;
-	}
+            //时间流逝，更新时间
+            curDate = tickTock(year, data);
+        }
+    }
 
-	public long format(long j) {	
-		int year = Integer.parseInt((j+"").substring(0, 4));
-		int month = Integer.parseInt((j+"").substring(4, 6));
-		int day = Integer.parseInt((j+"").substring(6,8));
-		int hours =Integer.parseInt((j+"").substring(8,10));
-		int minuts = Integer.parseInt((j+"").substring(10,12));
-		int[] monthDay = {31,28,31,30,31,30,31,31,30,31,30,31};
-		while(minuts >= 60) {
-			minuts-=60;
-			hours++;
-		}
-		while(hours >= 24) {
-			hours-=24;
-			day++;
-		}
-		if(day > monthDay[((month-1)%12)]) {
-			if(month == 2) {
-				if((year%4 == 0 && year%100 != 0)||
-						year%400 == 0) {
-					//闰年二月
-					if(day > 29) {
-						month++;
-						day -= 29;
-					}
-				}else {
-					month++;
-					day -= 28;
-				}
-			}else {
-				month++;
-				day -= monthDay[((month-1)%12)];
-			}
-		}
-		while(month > 12) {
-			month-=12;
-			year++;
-		}
-		
-		StringBuffer str = new StringBuffer();
-		str.append(year);		
-		str.append(month<10?"0"+month:month);
-		str.append(day<10?"0"+day:day);
-		str.append(hours<10?"0"+hours:hours);
-		str.append(minuts<10?"0"+minuts:minuts);
-		
-		return Long.parseLong(str.toString());
-	}
+    //匹配Crontab的配置信息
+    static boolean matchCrontab(CrontabData ct, int[] data) {
+        return ct.eachMins[data[0]] && ct.eachHours[data[1]] && ct.eachDayOfMonth[data[2]] &&
+                ct.eachMonth[data[3]] && ct.eachDayOfWeek[data[4]];
+    }
 
-	class Crontab{
-		
-		String minutes;
-		
-		String hours;
-		
-		String dayOfmonth;
-		
-		String month;
-		
-		String dayOfweek;
-		
-		String command;
-		
-		public Crontab() {
-			
-		}
-		
-		public Crontab(String minutes,String hours,String dayOfmonth,String month,String dayOfweek,String command) {
-			this.minutes = minutes;
-			this.hours = hours;
-			this.dayOfmonth = dayOfmonth;
-			this.month = month;
-			this.dayOfweek = dayOfweek;
-			this.command = command;
-		}
+    //时间往后走
+    static String tickTock(int year, int[] data) {
 
-		public String getMinutes() {
-			return minutes;
-		}
+        //加分，满进位
+        boolean ifPlusHour = false;
+        //满时进位，分归零
+        if (data[0] + 1 == 60) {
+            data[0] = 0;
+            ifPlusHour = true;
+        } else
+            data[0]++;
 
-		public void setMinutes(String minutes) {
-			this.minutes = minutes;
-		}
+        //加时
+        boolean ifPlusDay = false;
+        if (ifPlusHour) {
+            //满天进位，时归零
+            if (data[1] + 1 == 24) {
+                data[1] = 0;
+                ifPlusDay = true;
+            } else
+                data[1]++;
+        }
 
-		public String getHours() {
-			return hours;
-		}
+        //加日
+        boolean ifPlusMon = false;
+        if (ifPlusDay) {
+            //二月
+            //非闰年二月
+            if (data[3] == 2 && !isLeapYear(year) && data[2] + 1 == 29) {
+                data[2] = 1;
+                ifPlusMon = true;
+            }
+            //闰年二月
+            else if (data[3] == 2 && isLeapYear(year) && data[2] + 1 == 30) {
+                data[2] = 1;
+                ifPlusMon = true;
+            }
+            //小月
+            else if (data[2] + 1 == 31 && ((data[3] == 4 || data[3] == 6 ||
+                    data[3] == 9 || data[3] == 11))) {
+                data[2] = 1;
+                ifPlusMon = true;
+            }
+            //大月
+            else if (data[2] + 1 == 32 && ((data[3] == 1 || data[3] == 3 ||
+                    data[3] == 5 || data[3] == 7 || data[3] == 8 ||
+                    data[3] == 10 || data[3] == 12))) {
+                data[2] = 1;
+                ifPlusMon = true;
+            }
+            //没满年，月自增
+            else
+                data[2]++;
+        }
 
-		public void setHours(String hours) {
-			this.hours = hours;
-		}
+        //加月，
+        boolean ifPlusYear = false;
+        if (ifPlusMon) {
+            //满年进位，月归一
+            if (data[3] + 1 == 13) {
+                data[3] = 1;
+                ifPlusYear = true;
+            } else
+                data[3]++;
+        }
 
-		public String getDayOfmonth() {
-			return dayOfmonth;
-		}
+        //加年
+        if (ifPlusYear)
+            year++;
 
-		public void setDayOfmonth(String dayOfmonth) {
-			this.dayOfmonth = dayOfmonth;
-		}
+        String month = data[3] < 10 ? "0" + data[3] : "" + data[3];
+        String dayOfMonth = data[2] < 10 ? "0" + data[2] : "" + data[2];
+        String hour = data[1] < 10 ? "0" + data[1] : "" + data[1];
+        String min = data[0] < 10 ? "0" + data[0] : "" + data[0];
 
-		public String getMonth() {
-			return month;
-		}
+        return year + "" + month + dayOfMonth + hour + min;
+    }
 
-		public void setMonth(String month) {
-			this.month = month;
-		}
+    //判断闰年
+    static boolean isLeapYear(int year) {
+        return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+    }
 
-		public String getDayOfweek() {
-			return dayOfweek;
-		}
+    //求某天是星期几,返回的是0-6，对应星期一到星期天
+    static int getDayOfWeek(String date) {
+        //总天数
+        int totalDays = 0;
 
-		public void setDayOfweek(String dayOfweek) {
-			this.dayOfweek = dayOfweek;
-		}
+        //加年
+        int year = new Integer(date.substring(0, 4));
+        for (int i = 1970; i < year; i++)
+            totalDays += isLeapYear(i) ? 366 : 365;
 
-		public String getCommand() {
-			return command;
-		}
-
-		public void setCommand(String command) {
-			this.command = command;
-		}		
-	}
-
+        //加月
+        int month = new Integer(date.substring(4, 6));
+        for (int i = 0; i < month - 1; i++) {
+            totalDays += months[i];
+            if (i == 1 && isLeapYear(year))
+                totalDays++;
+        }
+        //加日
+        totalDays += new Integer(date.substring(6, 8));
+        return (2 + totalDays) % 7;
+    }
 }
 
+//Crontab的一条配置信息
+class CrontabData {
+    String mins;
+    String hours;
+    String dayOfMonth;
+    String month;
+    String dayOfWeek;
+    String assignment;
 
+    //存储每个时间单位的状态，False为未标记，True为标记了的,代表该时间单位有任务标记
+    boolean[] eachMins = new boolean[60];
+    boolean[] eachHours = new boolean[24];
+    boolean[] eachDayOfMonth = new boolean[32];
+    boolean[] eachMonth = new boolean[13];
+    boolean[] eachDayOfWeek = new boolean[8];
+
+    CrontabData() {}
+
+    CrontabData(String mins, String hours, String dayOfMonth,
+                String month, String dayOfWeek, String assignment) {
+        this.mins = mins;
+        this.hours = hours;
+        this.dayOfMonth = dayOfMonth;
+        this.month = month;
+        this.dayOfWeek = dayOfWeek;
+        this.assignment = assignment;
+        initialize(eachMins, mins.split(","));
+        initialize(eachHours, hours.split(","));
+        initialize(eachDayOfMonth, dayOfMonth.split(","));
+        initialize(eachMonth, month.split(","));
+        initialize(eachDayOfWeek, dayOfWeek.split(","));
+    }
+
+    //初始化状态数组，标记该Crontab的某条配置信息对应时间点有任务
+    void initialize(boolean[] tab, String[] indexArr) {
+        for (int i = 0; i < indexArr.length; i++) {
+            String[] arr = indexArr[i].split("-");
+            int start, end;
+
+            //只标记一个
+            if (arr.length == 1) {
+                //星号
+                if (arr[0].charAt(0) == '*'){
+                    start = 0;
+                    end = tab.length - 1;
+                }
+                //单词或数字
+                else {
+                    start = wordToNum(arr[0]);
+                    end = start;
+                }
+            }
+            //连续标记
+            else {
+                start = wordToNum(arr[0]);
+                end = wordToNum(arr[1]);
+            }
+
+            //标记
+            for (int j = start; j <= end; j++)
+                tab[j] = true;
+        }
+    }
+
+    //单词转数字
+    int wordToNum(String word) {
+        String[] monthWord = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] dayOfWeekWord = {"", "Mon", "Tue", "Web", "Thu", "Fri", "Sat", "Sun"};
+
+        for (int i = 1; i < monthWord.length; i++) {
+            if (word.equals(monthWord[i]))
+                return i;
+        }
+
+        for (int i = 1; i < dayOfWeekWord.length; i++) {
+            if (word.equals(dayOfWeekWord[i]))
+                return i;
+        }
+
+        return new Integer(word);
+    }
+
+}
