@@ -5,12 +5,12 @@ package pers.dingjie.classic;
  * @author      : dingjie
  * @date 	    : 2017年7月24日 上午10:22:32 
  */
-public class InsertSort {
+public class InsertionSort {
 	
 	/**
 	 * @description 传统直接插入排序
 	 */
-	public void insertSort_1(int arr[]){
+	public void insertionSort_1(int arr[]){
 		int n = arr.length;
 		
         for(int i = 1; i < n; ++i){   		 //控制需要比较的数据的下标
@@ -29,7 +29,7 @@ public class InsertSort {
 	/**
 	 * @description 直接插入排序的另一个版本
 	 */
-	public void insertSort_2(int arr[]) {
+	public void insertionSort_2(int arr[]) {
 		int n = arr.length;
 		
 		for (int i = 1; i < n; i++ ) {
@@ -47,7 +47,7 @@ public class InsertSort {
 	 * @description 其他版本的插入排序
 	 * 	效率低
 	 */
-	public void insertSort_3(int arr[]) {
+	public void insertionSort_3(int arr[]) {
 		int n = arr.length;
 		int temp;
 		
@@ -67,7 +67,7 @@ public class InsertSort {
 	 * @description 折半插入排序
 	 *  改进:如果比较操作的代价比交换操作大的话，可以采用二分查找法来减少比较操作的数目。
 	 */
-	public void binaryInsertSort(int[] arr) {
+	public void binaryInsertionSort(int[] arr) {
 		int n = arr.length;
 		
 		for(int i = 1; i < n; i++){
