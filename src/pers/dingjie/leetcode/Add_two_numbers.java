@@ -46,24 +46,6 @@ public class Add_two_numbers {
     	ListNode l3 = addTwoNumbers1(reverse1(l1),reverse1(l2));
     	return reverse1(l3);
     }
-    
-	public static void main(String[] args) {
-		ListNode l1 = new ListNode(5); 
-		ListNode l11 = new ListNode(4); 
-		ListNode l12 = new ListNode(3); 
-		l11.next = l12;
-		l1.next = l11;
-		
-		ListNode l2 = new ListNode(5);
-		ListNode l21 = new ListNode(6);
-		ListNode l22 = new ListNode(4);
-		l21.next = l22;
-		l2.next = l21;
-		
-		ListNode l3 = addTwoNumbers2(l1,l2);
-		l3.print();
-
-	}
 
 	/**
 	 * @description 头插法链表逆置
