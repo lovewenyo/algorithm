@@ -60,14 +60,4 @@ public class Two_sum {
 	    }
 		return null;  
     }
-
-	public static void main(String[] args) {
-		int[] num = {2, 7, 11, 15};
-		int target = 9;
-
-		int[] arr = twoSum(num,target);
-		for (int i = 0; i < arr.length; i++) {
-			System.out.println(arr[i]);
-		}
-	}
 }
