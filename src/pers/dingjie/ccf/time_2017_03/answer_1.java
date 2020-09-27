@@ -14,10 +14,10 @@ public class answer_1 {
         int weight = in.nextInt();
         int nums = 1;
         int now = 0;
-        for(int i = 0;i<friends;i++){
+        for (int i = 0; i < friends; i++) {
             now += in.nextInt();
 
-            if(now >= weight && i<friends-1){
+            if (now >= weight && i < friends - 1) {
                 nums++;
                 now = 0;
             }

@@ -4,41 +4,41 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
-测试用例
-	3 201711170032 201711222352
-	0 7 * * 1,3-5 get_up
-	30 23 * * Sat,Sun go_to_bed
-	15 12,18 * * * have_dinner
-样例输出
-	201711170700 get_up
-	201711171215 have_dinner
-	201711171815 have_dinner
-	201711181215 have_dinner
-	201711181815 have_dinner
-	201711182330 go_to_bed
-	201711191215 have_dinner
-	201711191815 have_dinner
-	201711192330 go_to_bed
-	201711200700 get_up
-	201711201215 have_dinner
-	201711201815 have_dinner
-	201711211215 have_dinner
-	201711211815 have_dinner
-	201711220700 get_up
-	201711221215 have_dinner
-	201711221815 have_dinner
+ * 测试用例
+ * 3 201711170032 201711222352
+ * 0 7 * * 1,3-5 get_up
+ * 30 23 * * Sat,Sun go_to_bed
+ * 15 12,18 * * * have_dinner
+ * 样例输出
+ * 201711170700 get_up
+ * 201711171215 have_dinner
+ * 201711171815 have_dinner
+ * 201711181215 have_dinner
+ * 201711181815 have_dinner
+ * 201711182330 go_to_bed
+ * 201711191215 have_dinner
+ * 201711191815 have_dinner
+ * 201711192330 go_to_bed
+ * 201711200700 get_up
+ * 201711201215 have_dinner
+ * 201711201815 have_dinner
+ * 201711211215 have_dinner
+ * 201711211815 have_dinner
+ * 201711220700 get_up
+ * 201711221215 have_dinner
+ * 201711221815 have_dinner
  */
 
 /**
  * @description : Crontab 40分
  * @author      : dingjie
- * @date 	    : 2018年7月24日 上午9:59:21 
+ * @date        : 2018年7月24日 上午9:59:21 
  */
 public class Demo3 {
     static int[] months = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);      
+        Scanner scanner = new Scanner(System.in);
         int crontabNum = scanner.nextInt();
         String startDate = scanner.next();
         String endDate = scanner.next();
@@ -48,10 +48,10 @@ public class Demo3 {
         ArrayList<CrontabData> list = new ArrayList<>();
         for (int i = 0; i < crontabNum; i++) {
             list.add(new CrontabData(scanner.next(), scanner.next(),
-            		scanner.next(), scanner.next(), scanner.next(), scanner.next()));
+                    scanner.next(), scanner.next(), scanner.next(), scanner.next()));
         }
         scanner.close();
-        
+
         //从开始时间开始查看每个时间是否符合Crontab
         while (!curDate.equals(endDate)) {
             int year = new Integer(curDate.substring(0, 4));
@@ -208,7 +208,8 @@ class CrontabData {
     boolean[] eachMonth = new boolean[13];
     boolean[] eachDayOfWeek = new boolean[8];
 
-    CrontabData() {}
+    CrontabData() {
+    }
 
     CrontabData(String mins, String hours, String dayOfMonth,
                 String month, String dayOfWeek, String assignment) {
@@ -234,7 +235,7 @@ class CrontabData {
             //只标记一个
             if (arr.length == 1) {
                 //星号
-                if (arr[0].charAt(0) == '*'){
+                if (arr[0].charAt(0) == '*') {
                     start = 0;
                     end = tab.length - 1;
                 }

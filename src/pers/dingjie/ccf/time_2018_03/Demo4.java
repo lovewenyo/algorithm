@@ -3,49 +3,49 @@ package pers.dingjie.ccf.time_2018_03;
 import java.util.Scanner;
 
 /**
-样例输入
-3
-1 2 1
-2 1 2
-0 0 0
-2 1 1
-0 2 1
-0 0 2
-0 0 0
-0 0 0
-0 0 0
-样例输出
-3
--4
-0
+ * 样例输入
+ * 3
+ * 1 2 1
+ * 2 1 2
+ * 0 0 0
+ * 2 1 1
+ * 0 2 1
+ * 0 0 2
+ * 0 0 0
+ * 0 0 0
+ * 0 0 0
+ * 样例输出
+ * 3
+ * -4
+ * 0
  */
 
 /**
  * @description : 棋局评估
  * @author      : dingjie
- * @date 	    : 2018年8月29日 下午4:20:46 
+ * @date        : 2018年8月29日 下午4:20:46 
  */
 
 public class Demo4 {
     private static int[][] board = new int[3][3];//棋盘
     private static int ALICE = 1;
     private static int BOB = 2;
-    
+
     public static void main(String[] args) {
-    	Scanner scanner = new Scanner(System.in);
-    	
+        Scanner scanner = new Scanner(System.in);
+
         int T;//数据的组数
         while (scanner.hasNext()) {
-            T = scanner.nextInt();         
-            
-            for (int i = 0; i < T; i++) {       	
+            T = scanner.nextInt();
+
+            for (int i = 0; i < T; i++) {
                 //初始化棋盘
                 for (int j = 0; j < 3; j++) {
                     for (int k = 0; k < 3; k++) {
-                    	board[j][k] = scanner.nextInt();
+                        board[j][k] = scanner.nextInt();
                     }
                 }
-                
+
                 int score = win(ALICE);
                 if (score != 0) {
                     System.out.println(score);
