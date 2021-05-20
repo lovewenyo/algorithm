@@ -3,14 +3,14 @@ package per.jaceding.algorithm.leetcode.dp;
 /**
  * 最小花费爬楼梯
  * <p>
- * 确定数组含义：
+ * 确定状态变量：
  * dp[x] 表示爬到第x阶楼梯时的最小花费
  * <p>
- * 确定状态转义方程：
+ * 确定状态转移方程：
  * dp[x] = Math.min(dp[x-1], dp[x-2]) + cost[x]
  * 设数组长度为n，最终结果就是：Math.min(dp[n-1], dp[n-2])
  * <p>
- * 确定初始值：
+ * 确定边界条件：
  * dp[0] = cost[0];
  * dp[1] = cost[1];
  *
