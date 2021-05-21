@@ -4,7 +4,7 @@ package per.jaceding.algorithm.leetcode.dp;
  * 确定状态变量：
  * dp[x-1] 表示房屋数组长度为x时能够窃取的最高金额
  * <p>
- * 确定状态转义方程：
+ * 确定状态转移方程：
  * dp[x] = Math.max(dp[x-1], dp[x-2] + arr[x])
  * <p>
  * 确定边界值：
