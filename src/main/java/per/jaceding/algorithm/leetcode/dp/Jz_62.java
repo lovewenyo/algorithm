@@ -1,6 +1,8 @@
 package per.jaceding.algorithm.leetcode.dp;
 
 /**
+ * 约瑟夫环
+ *
  * 假设最后剩下的数字为x,每次删除第m个元素，每一轮数字x，index1表示倒数第一轮数字x所处的位置
  * 倒数第1轮，index1=0
  * 倒数第2轮，index2=(index1 + m) % 2
