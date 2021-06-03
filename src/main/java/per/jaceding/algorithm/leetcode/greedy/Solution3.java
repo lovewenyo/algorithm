@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 存在前后指针l, r, max表示无重复的最长字串，windows表示当前窗口包含的元素个数
+ * 存在前后指针l, r, max表示无重复的最长字串，windows表示当前窗口包含的元素
  * 第一步，移动指针r一直向后移动，每移动一次，将 s[r] 元素添加入 windows 中，直到windows中已存在该元素，此时可能最大的无重复字符的字串
  * 第二步，移动指针l一直向后移动，每移动一次，则将s[l]元素从 windows 移除，直到移除的元素s[l] 与 s[r] 相等
  * 第三步，重复上述操作，直到 r == s.length
