@@ -33,8 +33,25 @@ public class Solution55 {
         return true;
     }
 
+    /**
+     * 优化：max表示最大能到达的位置
+     */
+    public boolean canJump1(int[] nums) {
+        if (nums.length <= 1) {
+            return true;
+        }
+        int max = nums[0];
+        for (int i = 0; i <= max; i++) {
+            max = Math.max(max, i + nums[i]);
+            if (max >= nums.length - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
-        int[] arr = {3, 2, 1, 0, 4};
-        System.out.println(new Solution55().canJump(arr));
+        int[] arr = {1, 2, 3};
+        System.out.println(new Solution55().canJump1(arr));
     }
 }
