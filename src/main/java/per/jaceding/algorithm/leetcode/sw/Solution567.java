@@ -1,4 +1,4 @@
-package per.jaceding.algorithm.leetcode.greedy;
+package per.jaceding.algorithm.leetcode.sw;
 
 import java.util.HashMap;
 import java.util.LinkedList;
