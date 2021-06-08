@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
+ * 当前代码非最优解
+ *
  * 最小栈的最佳解法: https://zhuanlan.zhihu.com/p/87257507
  *
  * @author jaceding
@@ -11,40 +13,32 @@ import java.util.Deque;
  */
 public class Solution155 {
 
-    private final Deque<Integer> stack = new ArrayDeque<>();
+    private final Deque<Integer> stack1 = new ArrayDeque<>();
 
-    private int min;
+    private final Deque<Integer> stack2 = new ArrayDeque<>();
 
     public void push(int val) {
-        if (stack.isEmpty()) {
-            min = val;
-            stack.push(0);
+        stack1.push(val);
+        if (stack2.isEmpty()) {
+            stack2.push(val);
         } else {
-            int n = val - min;
-            stack.push(n);
-            if (n < 0) {
-                min = n;
-            }
+            stack2.push(Math.min(val, stack2.peek()));
         }
     }
 
     public void pop() {
-        int n = stack.peek();
-        if (n < 0) {
-            min = min - n;
+        if (stack1.isEmpty()) {
+            return;
         }
-        stack.pop();
+        stack1.pop();
+        stack2.pop();
     }
 
     public int top() {
-        int n = stack.peek();
-        if (n < 0) {
-            return min;
-        }
-        return n + min;
+        return stack1.peek();
     }
 
     public int getMin() {
-        return min;
+        return stack2.peek();
     }
 }
