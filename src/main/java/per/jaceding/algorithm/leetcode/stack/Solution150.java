@@ -2,6 +2,9 @@ package per.jaceding.algorithm.leetcode.stack;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * @author jaceding
@@ -15,39 +18,24 @@ public class Solution150 {
             return Integer.parseInt(tokens[0]);
         }
         Deque<Integer> stack = new ArrayDeque<>(n);
-        for (int i = 0; i < n; i++) {
-            String str = tokens[i];
-            switch (str) {
-                case "+":
-                case "*":
-                case "-":
-                case "/":
-                case "%":
-                    stack.push(operation(str, stack));
-                    break;
-                default:
-                    stack.push(Integer.parseInt(str));
+
+        Map<String, BiFunction<Integer, Integer, Integer>> map = new HashMap<String, BiFunction<Integer, Integer, Integer>>() {{
+            put("+", (t, u) -> t + u);
+            put("-", (t, u) -> t - u);
+            put("*", (t, u) -> t * u);
+            put("/", (t, u) -> t / u);
+            put("%", (t, u) -> t % u);
+        }};
+
+        for (String str : tokens) {
+            if (map.keySet().contains(str)) {
+                int q = stack.pop();
+                int p = stack.pop();
+                stack.push(map.get(str).apply(p, q));
+            } else {
+                stack.push(Integer.parseInt(str));
             }
         }
         return stack.pop();
-    }
-
-    private int operation(String op, Deque<Integer> stack) {
-        int q = stack.pop();
-        int p = stack.pop();
-        switch (op) {
-            case "+":
-                return p + q;
-            case "*":
-                return p * q;
-            case "-":
-                return p - q;
-            case "/":
-                return p / q;
-            case "%":
-                return p % q;
-            default:
-                return 0;
-        }
     }
 }
