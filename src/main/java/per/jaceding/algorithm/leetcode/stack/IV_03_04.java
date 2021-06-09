@@ -22,8 +22,10 @@ public class IV_03_04 {
      * Removes the element from in front of queue and returns that element.
      */
     public int pop() {
-        while (!stack1.isEmpty()){
-            stack2.push(stack1.pop());
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
         }
         return stack2.pop();
     }
@@ -32,8 +34,10 @@ public class IV_03_04 {
      * Get the front element.
      */
     public int peek() {
-        while (!stack1.isEmpty()){
-            stack2.push(stack1.pop());
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
         }
         return stack2.peek();
     }
