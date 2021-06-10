@@ -3,7 +3,7 @@ package per.jaceding.algorithm.leetcode.stack;
 import java.util.LinkedList;
 
 /**
- * todo: 已完成的代码都运行超时
+ * todo: 解决运行超时
  *
  * @author jaceding
  * @date 2021/6/9
