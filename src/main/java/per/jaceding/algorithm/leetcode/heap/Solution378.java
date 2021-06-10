@@ -10,6 +10,12 @@ public class Solution378 {
 
     public int kthSmallest(int[][] matrix, int k) {
         int n = matrix.length;
+        if (k == 1) {
+            return matrix[0][0];
+        }
+        if (k == n * n) {
+            return matrix[n - 1][n - 1];
+        }
         int i = 0, j = 0;
         int maxI = n - 1, maxJ = n - 1;
         PriorityQueue<Integer> queue = new PriorityQueue<>(k, (o1, o2) -> o2 - o1);
