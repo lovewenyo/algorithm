@@ -15,10 +15,31 @@ public class Solution137 {
     public int singleNumber(int[] nums) {
         int n = nums.length;
         Map<Integer, Integer> map = new HashMap<>(n, 0.75f);
-        for (int i = 0; i < n; i++) {
-            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
         return (int) map.entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey).toArray()[0];
+    }
+
+    /**
+     * 数位统计
+     */
+    public int singleNumber1(int[] nums){
+        int[] cnt = new int[32];
+        for (int x : nums) {
+            for (int i = 0; i < 32; i++) {
+                if (((x >> i) & 1) == 1) {
+                    cnt[i]++;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((cnt[i] % 3 & 1) == 1) {
+                ans += (1 << i);
+            }
+        }
+        return ans;
     }
 
     public static void main(String[] args) {
