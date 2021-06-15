@@ -1,6 +1,8 @@
 package per.jaceding.algorithm.leetcode.bit;
 
 /**
+ * 非最优解
+ *
  * @author jaceding
  * @date 2021/6/15
  */
